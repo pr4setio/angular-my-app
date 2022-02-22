@@ -10,12 +10,12 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'my-app';
-  currentUser: User;
+  existingUser: User;
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService
 ) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    this.authenticationService.existingUser.subscribe(x => this.existingUser = x);
 }
 
 logout() {

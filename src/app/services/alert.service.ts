@@ -5,13 +5,13 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AlertService {
     private subject = new Subject<any>();
-    private keepAfterNavigationChange = false;
+    private stayHere = false;
 
     constructor(private router: Router) {
         router.events.subscribe(event => {
             if (event instanceof NavigationStart) {
-                if (this.keepAfterNavigationChange) {
-                    this.keepAfterNavigationChange = false;
+                if (this.stayHere) {
+                    this.stayHere = false;
                 } else {
                     this.subject.next();
                 }
@@ -19,13 +19,13 @@ export class AlertService {
         });
     }
 
-    success(message: string, keepAfterNavigationChange = false) {
-        this.keepAfterNavigationChange = keepAfterNavigationChange;
+    success(message: string, stayHere = false) {
+        this.stayHere = stayHere;
         this.subject.next({ type: 'success', text: message });
     }
 
-    error(message: string, keepAfterNavigationChange = false) {
-        this.keepAfterNavigationChange = keepAfterNavigationChange;
+    error(message: string, stayHere = false) {
+        this.stayHere = stayHere;
         this.subject.next({ type: 'error', text: message });
     }
 

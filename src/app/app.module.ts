@@ -9,10 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeComponent } from './employee/employee.component';
-import { mockingBackendProvider, JwtInterceptor, ErrorInterceptor } from './helpers';
+import { mockingApi, JwtHandler, ErrorHandler } from './helpers';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routing } from './app.routing';
-import { AlertComponent } from './components';
+import { NotificationComponent } from './components';
 import { RegisterComponent } from './register/register.component';
 
 
@@ -21,7 +21,7 @@ import { RegisterComponent } from './register/register.component';
     AppComponent,
     LoginComponent,
     EmployeeComponent,
-    AlertComponent,
+    NotificationComponent,
     RegisterComponent
   ],
   imports: [
@@ -37,10 +37,10 @@ import { RegisterComponent } from './register/register.component';
     routing
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtHandler, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorHandler, multi: true },
 
-    mockingBackendProvider
+    mockingApi
   ],
   bootstrap: [AppComponent]
 })

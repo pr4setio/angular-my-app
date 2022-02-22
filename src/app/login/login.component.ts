@@ -12,7 +12,7 @@ import { AlertService, AuthenticationService } from '@app/services';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   error: string;
-  returnUrl: string;
+  originalUrl: string;
   submitted: boolean;
   constructor(
     private route: ActivatedRoute,
@@ -20,17 +20,17 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private alertService: AlertService
     ) {
-      if (this.authenticationService.currentUserValue) { 
+      if (this.authenticationService.existingUserValue) { 
         this.router.navigate(['/']);
     }
     }
 
   ngOnInit() {
     this.initForm();
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.originalUrl = this.route.snapshot.queryParams['originalUrl'] || '/';
   }
 
-  get f() { return this.loginForm.controls; }
+  get form() { return this.loginForm.controls; }
 
   initForm() {
     this.loginForm = new FormGroup({
@@ -44,11 +44,12 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
         return;
     }
-    this.authenticationService.login(this.f.username.value, this.f.password.value)
+    this.authenticationService.login(this.form.username.value, this.form.password.value)
     .pipe(first())
     .subscribe(
         data => {
-            this.router.navigate([this.returnUrl]);
+            this.router
+            .navigate([this.originalUrl]);
         },
         error => {
             this.alertService.error(error);

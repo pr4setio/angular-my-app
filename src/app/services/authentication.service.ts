@@ -7,33 +7,30 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+    private existingUserSubject: BehaviorSubject<User>;
+    public existingUser: Observable<User>;
 
     constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
+        this.existingUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('existingUser')));
+        this.existingUser = this.existingUserSubject.asObservable();
     }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
+    public get existingUserValue(): User {
+        return this.existingUserSubject.value;
     }
 
     logout() {
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
+        localStorage.removeItem('existingUser');
+        this.existingUserSubject.next(null);
     }
 
     login(username: string, password: string) {
-        console.log("ada disini..1");
         return this.http.post<any>(`${environment.apiUrl}/users/authenticate`, { username, password })
             .pipe(map(user => {
-                console.log("ada disini..2");
                 if (user && user.token) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
+                    localStorage.setItem('existingUser', JSON.stringify(user));
+                    this.existingUserSubject.next(user);
                 }
-
                 return user;
             }));
     }

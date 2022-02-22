@@ -1,0 +1,1 @@
+﻿<div *ngIf="notif" [ngClass]="{ 'alert-success': notif.type === 'success','alert': notif, 'alert-danger': notif.type === 'error' }">{{notif.text}}</div>
