@@ -12,7 +12,7 @@ import { EmployeeComponent } from './employee/employee.component';
 import { mockingApi, JwtHandler, ErrorHandler } from './helpers';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { routing } from './app.routing';
-import { NotificationComponent } from './components';
+import { NotificationComponent } from './shared';
 import { RegisterComponent } from './register/register.component';
 
 
