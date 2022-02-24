@@ -4,9 +4,23 @@
 <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="loginUser($event)">
   <mat-form-field>
     <input type="text" matInput placeholder="Username" formControlName="username">
+    <mat-error >
+      <div *ngIf="submitted && form.username.errors">
+        <div *ngIf="form.username.errors.required">Username is required</div>
+        <div *ngIf="form.username.errors.minlength">Minimum Length 5 Character</div>
+        <div *ngIf="form.username.errors.maxlength">Maximum Length 12 Character</div>
+    </div>
+   </mat-error>
   </mat-form-field>
   <mat-form-field>
     <input type="password" matInput placeholder="Password" formControlName="password">
+    <mat-error >
+      <div *ngIf="submitted && form.password.errors">
+        <div *ngIf="form.password.errors.required">Password is required</div>
+        <div *ngIf="form.password.errors.minlength">Minimum Length 5 Character</div>
+        <div *ngIf="form.password.errors.maxlength">Maximum Length 8 Character</div>
+    </div>
+  </mat-error>
   </mat-form-field>
 
 <div class="button">

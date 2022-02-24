@@ -6,3 +6,19 @@
   box-sizing: border-box;
 }
 
+.jumbotron {
+    margin-bottom: 0;
+}
+
+.information {
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.main-wrapper {
+    height: 100vh;  
+  }
+
+  .modal-backdrop {
+    z-index: 0;
+  }

@@ -1,15 +1,24 @@
-<div class="jumbotron">
+<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-secondary" *ngIf="existingUser">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/">Home</a>
+        <a class="nav-item nav-link" (click)="logout()">Logout</a>
+    </div>
+</nav>
+<div class="h-100 d-inline-block">
+<div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3">
                 <notification></notification>
                 <router-outlet></router-outlet>
-            </div>
-        </div>
     </div>
 </div>
-<div class="text-center">
-    <p>
-        <a href="#" target="_top">Angular - Mini Project - Prasetio Utomo</a>
-    </p>
-</div>
+            <div class="alert alert-info information">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam aliquet elit sit amet aliquet consectetur. Vestibulum id dictum erat. Mauris sapien enim, sagittis tincidunt mattis non, ultrices nec dui. Nulla eu commodo lectus. Nunc eu cursus ante. 
+                    Mauris ullamcorper auctor orci.</p>
+                <ul>
+                    <li>Nulla vitae est aliquam, rhoncus tellus vitae, mollis leo.</li>
+                    <li>Vestibulum sed accumsan justo.</li>
+                    <li>Aenean commodo dui vitae nunc facilisis vulputate ut nec dolor.</li>
+                </ul>
+            </div>
+            </div>

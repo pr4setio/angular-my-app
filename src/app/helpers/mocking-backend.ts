@@ -10,6 +10,7 @@ export class MockingAPIRest implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
+        let employees: any[] = JSON.parse(localStorage.getItem('employees')) || [];
 
         return of(null).pipe(mergeMap(() => {
 
@@ -88,6 +89,33 @@ export class MockingAPIRest implements HttpInterceptor {
                     }
 
                     return of(new HttpResponse({ status: 200 }));
+                } else {
+                    return throwError({ status: 401, error: { message: 'User Unauthorised' } });
+                }
+            }
+
+            // register employee
+            if (req.url.endsWith('/employees/register') && req.method === 'POST') {
+                let newEmployee = req.body;
+
+                // validation
+                let duplicateEmployee = employees.filter(employee => { return employee.username === newEmployee.username; }).length;
+                if (duplicateEmployee) {
+                    return throwError({ error: { message: 'Username "' + newEmployee.username + '" is already register' } });
+                }
+
+                // save new user
+                newEmployee.id = employees.length + 1;
+                employees.push(newEmployee);
+                localStorage.setItem('employees', JSON.stringify(employees));
+
+                return of(new HttpResponse({ status: 200 }));
+            }
+
+            // get Employee
+            if (req.url.endsWith('/employees') && req.method === 'GET') {
+                if (req.headers.get('Authorization') === 'mocking-jwt-token') {
+                    return of(new HttpResponse({ status: 200, body: employees }));
                 } else {
                     return throwError({ status: 401, error: { message: 'User Unauthorised' } });
                 }

@@ -1,3 +1,206 @@
-<p>
-  employee works!
-</p>
+<div class="panel-body">
+  <div class="btn-group">
+  <button
+  class="button btn-success"
+  id="addNewEmployee"
+  (click)="addEmployee()">
+  Add New
+</button>
+<button
+class="button btn-primary"
+id="generateAllDummyData"
+(click)="generateDummyEmployee()">
+Generate Dummy
+</button>
+<button
+class="button btn-danger"
+id="clearAllDummyData"
+(click)="clearLocalStorage()">
+Clear Dummy
+</button>
+  </div>
+<div class="example-header">
+  <form style="display: flex" [formGroup]="filterForm" >
+    <mat-form-field>
+      <input matInput formControlName="username">
+      <mat-placeholder>username</mat-placeholder>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="email">
+      <mat-placeholder>email</mat-placeholder>
+    </mat-form-field>
+  </form>
+</div>
+<div class="table-responsive">
+  <table id="table-employee" aria-label="table-employee" mat-table [dataSource] = "dataSource" class = "mat-elevation-z8" matSort > 
+    <ng-container matColumnDef = "id">
+      <th id="employee-id" mat-header-cell *matHeaderCellDef mat-sort-header> #</th>
+      <td mat-cell *matCellDef = "let element"> {{element.id}} </td>
+   </ng-container>
+    <ng-container matColumnDef = "username">
+       <th id="employee-username" mat-header-cell *matHeaderCellDef mat-sort-header> UserName</th>
+       <td mat-cell *matCellDef = "let element"> {{element.username}} </td>
+    </ng-container>
+    <ng-container matColumnDef = "firstname">
+       <th id="employee-firstname" mat-header-cell *matHeaderCellDef mat-sort-header>Firstname</th>
+       <td mat-cell *matCellDef = "let element"> {{element.firstname}} </td>
+    </ng-container>
+    <ng-container matColumnDef = "lastname">
+       <th id="employee-lastname" mat-header-cell *matHeaderCellDef mat-sort-header>LastName</th>
+       <td mat-cell *matCellDef = "let element"> {{element.lastname}} </td>
+    </ng-container>
+    <ng-container matColumnDef = "email">
+       <th id="employee-email" mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+       <td mat-cell *matCellDef = "let element"> {{element.email}} </td>
+    </ng-container>
+    <ng-container matColumnDef = "birthdate">
+       <th id="employee-birthday" mat-header-cell *matHeaderCellDef mat-sort-header>Birthdate</th>
+      <td mat-cell *matCellDef = "let element"> {{ element.birthdate | date:'dd/MM/yyyy hh:mm:ss'}} </td>
+    </ng-container> 
+
+    <ng-container matColumnDef = "basicsalary">
+      <th id="employee-basicsalary" mat-header-cell *matHeaderCellDef mat-sort-header>Basic Salary</th>
+     <td mat-cell *matCellDef = "let element">{{ element.basicsalary.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) }} </td>
+   </ng-container> 
+   <ng-container matColumnDef = "status">
+    <th id="employee-status" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+   <td mat-cell *matCellDef = "let element">{{ element.status }} </td>
+ </ng-container> 
+ <ng-container matColumnDef = "group">
+  <th id="employee-group" mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
+ <td mat-cell *matCellDef = "let element">{{ element.group }} </td>
+</ng-container> 
+<ng-container matColumnDef = "description">
+  <th id="employee-description" mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+ <td mat-cell *matCellDef = "let element">{{ element.description | date:'dd/MM/yyyy hh:mm:ss'}} </td>
+</ng-container> 
+<ng-container matColumnDef="actionsColumn">
+  <th id="employee-action" mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+  <mat-cell *matCellDef="let row" class="button-action">
+      <button class="button btn-success" (click)="edit()">Edit</button>
+      <button class="button btn-danger" (click)="delete()">Delete</button>
+  </mat-cell>
+</ng-container>
+    <tr mat-header-row *matHeaderRowDef = "displayedColumns"></tr>
+    <tr mat-row *matRowDef = "let row; columns: displayedColumns;"></tr>
+ </table>
+ </div>
+
+    <mat-paginator [length]="100"
+              [pageSize]="5"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page">
+</mat-paginator>
+</div>
+
+<div class="modal fade" id="popupAddEmployee">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title">Add New Employee</h4>
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+      </div>
+      <form [formGroup]="addEmployeeForm" autocomplete="off">
+      <div class="modal-body">
+          <mat-form-field>
+            <input type="text" matInput placeholder="Username" formControlName="username">
+            <mat-error >
+              <div *ngIf="submitted && form.username.errors">
+                <div *ngIf="form.username.errors.required">Username is required</div>
+                <div *ngIf="form.username.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.username.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="First Name" formControlName="firstname">
+            <mat-error >
+              <div *ngIf="submitted && form.firstname.errors">
+                <div *ngIf="form.firstname.errors.required">First Name is required</div>
+                <div *ngIf="form.firstname.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.firstname.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Last Name" formControlName="lastname">
+            <mat-error >
+              <div *ngIf="submitted && form.lastname.errors">
+                <div *ngIf="form.lastname.errors.required">Lastname is required</div>
+                <div *ngIf="form.lastname.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.lastname.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Email" formControlName="email"
+            >
+            <mat-error >
+              <div *ngIf="submitted && form.email.errors">
+                <div *ngIf="form.email.errors.required">Email is required</div>
+                <div *ngIf="form.email.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.email.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+          <div class= "row">
+            <div class="form-group col-md-6">
+          <mat-form-field appearance="fill" class="example-form-field">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="datepicker" placeholder="Birth Date" formControlName="birthdate" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker>
+            </mat-datepicker>
+          </mat-form-field>
+          </div>
+          </div>
+          <div class= "row">
+            <div class="form-group col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Groups</mat-label>
+                <mat-select formControlName="group" multiple>
+                  <mat-option *ngFor="let group of listGroup" [value]="group.value">{{group.label}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+          </div>
+          <div class= "row">
+            <div class="form-group col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status" multiple>
+                  <mat-option *ngFor="let status of listStatus" [value]="status.value">{{status.label}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+          </div>
+          <mat-form-field>
+            <input type="number" matInput placeholder="Basic Salary" formControlName="basicsalary">
+            <mat-error >
+              <div *ngIf="submitted && form.basicsalary.errors">
+                <div *ngIf="form.basicsalary.errors.required">Birthdate is required</div>
+                <div *ngIf="form.basicsalary.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.basicsalary.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Description" formControlName="description">
+            <mat-error >
+              <div *ngIf="submitted && form.description.errors">
+                <div *ngIf="form.description.errors.required">Description is required</div>
+                <div *ngIf="form.description.errors.minlength">Minimum Length 5 Character</div>
+                <div *ngIf="form.description.errors.maxlength">Maximum Length 12 Character</div>
+            </div>
+           </mat-error>
+          </mat-form-field>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="addNew()">Add</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Close</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
